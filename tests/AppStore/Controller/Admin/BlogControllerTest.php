@@ -41,4 +41,12 @@ class BlogControllerTest extends WebTestCase
         $this->assertSame(Response::HTTP_FORBIDDEN, $client->getResponse()->getStatusCode());
     }
 
+    public function getUrlsForRegularUsers()
+    {
+        yield ['GET', '/en/admin/post/'];
+        yield ['GET', '/en/admin/post/1'];
+        yield ['GET', '/en/admin/post/1/edit'];
+        yield ['POST', '/en/admin/post/1/delete'];
+    }
+
 }
