@@ -30,4 +30,21 @@ class AddUserCommandTest extends KernelTestCase
         }
     }
 
+    /**
+     * @dataProvider isAdminDataProvider
+     *
+     * This test provides all the arguments required by the command, so the
+     * command runs non-interactively and it won't ask for any argument.
+     */
+    public function testCreateUserNonInteractive($isAdmin)
+    {
+        $input = $this->userData;
+        if ($isAdmin) {
+            $input['--admin'] = 1;
+        }
+        $this->executeCommand($input);
+
+        $this->assertUserCreated($isAdmin);
+    }
+
 }
