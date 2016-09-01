@@ -49,4 +49,21 @@ class BlogControllerTest extends WebTestCase
         yield ['POST', '/en/admin/post/1/delete'];
     }
 
+    public function testAdminBackendHomePage()
+    {
+        $client = static::createClient([], [
+            'PHP_AUTH_USER' => 'jane_admin',
+            'PHP_AUTH_PW' => 'kitten',
+        ]);
+
+        $crawler = $client->request('GET', '/en/admin/post/');
+        $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+
+        $this->assertGreaterThanOrEqual(
+            1,
+            $crawler->filter('body#admin_post_index #main tbody tr')->count(),
+            'The backend homepage displays all the available posts.'
+        );
+    }
+
 }
