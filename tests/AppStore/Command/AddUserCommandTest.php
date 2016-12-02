@@ -68,4 +68,14 @@ class AddUserCommandTest extends KernelTestCase
         $this->assertUserCreated($isAdmin);
     }
 
+    /**
+     * This is used to execute the same test twice: first for normal users
+     * (isAdmin = false) and then for admin users (isAdmin = true).
+     */
+    public function isAdminDataProvider()
+    {
+        yield [false];
+        yield [true];
+    }
+
 }
