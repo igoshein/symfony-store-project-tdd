@@ -55,4 +55,25 @@ class DefaultControllerTest extends WebTestCase
         $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
     }
 
+    /**
+     * The application contains a lot of secure URLs which shouldn't be
+     * publicly accessible. This tests ensures that whenever a user tries to
+     * access one of those pages, a redirection to the login form is performed.
+     *
+     * @dataProvider getSecureUrls
+     */
+    public function testSecureUrls($url)
+    {
+        $client = static::createClient();
+        $client->request('GET', $url);
+
+        $response = $client->getResponse();
+        $this->assertSame(Response::HTTP_FOUND, $response->getStatusCode());
+        $this->assertSame(
+            'http://localhost/en/login',
+            $response->getTargetUrl(),
+            sprintf('The %s secure URL redirects to the login form.', $url)
+        );
+    }
+
 }
