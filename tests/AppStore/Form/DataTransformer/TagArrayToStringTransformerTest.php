@@ -48,4 +48,14 @@ class TagArrayToStringTransformerTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('Hello', $tags[0]->getName());
     }
 
+    /**
+     * Ensures that duplicated tag names are ignored.
+     */
+    public function testDuplicateNames()
+    {
+        $tags = $this->getMockedTransformer()->reverseTransform('Hello, Hello, Hello');
+
+        $this->assertCount(1, $tags);
+    }
+
 }
