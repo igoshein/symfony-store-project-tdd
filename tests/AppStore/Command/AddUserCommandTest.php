@@ -96,4 +96,24 @@ class AddUserCommandTest extends KernelTestCase
         $this->assertSame($isAdmin ? ['ROLE_ADMIN'] : ['ROLE_USER'], $user->getRoles());
     }
 
+    /**
+     * This helper method abstracts the boilerplate code needed to test the
+     * execution of a command.
+     *
+     * @param array $arguments All the arguments passed when executing the command
+     * @param array $inputs    The (optional) answers given to the command when it asks for the value of the missing arguments
+     */
+    public function executeCommand(array $arguments, array $inputs = [])
+    {
+        self::bootKernel();
+
+        $container = self::$kernel->getContainer();
+        $command = new AddUserCommand($container->get('doctrine')->getManager(), $container->get('security.password_encoder'));
+        $command->setApplication(new Application(self::$kernel));
+
+        $commandTester = new CommandTester($command);
+        $commandTester->setInputs($inputs);
+        $commandTester->execute($arguments);
+    }
+
 }
