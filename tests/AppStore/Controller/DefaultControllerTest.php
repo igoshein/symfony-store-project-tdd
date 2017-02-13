@@ -83,4 +83,12 @@ class DefaultControllerTest extends WebTestCase
         yield ['/en/login'];
     }
 
+    public function getSecureUrls()
+    {
+        yield ['/en/admin/post/'];
+        yield ['/en/admin/post/new'];
+        yield ['/en/admin/post/1'];
+        yield ['/en/admin/post/1/edit'];
+    }
+
 }
