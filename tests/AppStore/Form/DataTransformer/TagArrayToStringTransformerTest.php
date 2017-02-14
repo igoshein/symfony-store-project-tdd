@@ -38,4 +38,14 @@ class TagArrayToStringTransformerTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(3, $transformer->reverseTransform('Hello, Demo, How,'));
     }
 
+    /**
+     * Ensures that leading/trailing spaces are ignored for tag names.
+     */
+    public function testTrimNames()
+    {
+        $tags = $this->getMockedTransformer()->reverseTransform('   Hello   ');
+
+        $this->assertSame('Hello', $tags[0]->getName());
+    }
+
 }
