@@ -58,4 +58,20 @@ class TagArrayToStringTransformerTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $tags);
     }
 
+    /**
+     * Ensures that the transformer uses tags already persisted in the database.
+     */
+    public function testUsesAlreadyDefinedTags()
+    {
+        $persistedTags = [
+            $this->createTag('Hello'),
+            $this->createTag('World'),
+        ];
+        $tags = $this->getMockedTransformer($persistedTags)->reverseTransform('Hello, World, How, Are, You');
+
+        $this->assertCount(5, $tags);
+        $this->assertSame($persistedTags[0], $tags[0]);
+        $this->assertSame($persistedTags[1], $tags[1]);
+    }
+
 }
