@@ -89,4 +89,32 @@ class TagArrayToStringTransformerTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('Hello,World', $transformed);
     }
 
+    /**
+     * This helper method mocks the real TagArrayToStringTransformer class to
+     * simplify the tests. See https://phpunit.de/manual/current/en/test-doubles.html.
+     *
+     * @param array $findByReturnValues The values returned when calling to the findBy() method
+     *
+     * @return TagArrayToStringTransformer
+     */
+    public function getMockedTransformer($findByReturnValues = [])
+    {
+        $tagRepository = $this->getMockBuilder(EntityRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $tagRepository->expects($this->any())
+            ->method('findBy')
+            ->will($this->returnValue($findByReturnValues));
+
+        $entityManager = $this
+            ->getMockBuilder(ObjectManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $entityManager->expects($this->any())
+            ->method('getRepository')
+            ->will($this->returnValue($tagRepository));
+
+        return new TagArrayToStringTransformer($entityManager);
+    }
+
 }
