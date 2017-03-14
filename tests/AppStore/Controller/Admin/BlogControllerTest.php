@@ -111,4 +111,31 @@ class BlogControllerTest extends WebTestCase
         $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
     }
 
+    /**
+     * This test changes the database contents by editing a blog post. However,
+     * thanks to the DAMADoctrineTestBundle and its PHPUnit listener, all changes
+     * to the database are rolled back when this test completes. This means that
+     * all the application tests begin with the same database contents.
+     */
+    public function testAdminEditPost()
+    {
+        $newBlogPostTitle = 'Blog Post Title '.mt_rand();
+
+        $client = static::createClient([], [
+            'PHP_AUTH_USER' => 'jane_admin',
+            'PHP_AUTH_PW' => 'kitten',
+        ]);
+        $crawler = $client->request('GET', '/en/admin/post/1/edit');
+        $form = $crawler->selectButton('Save changes')->form([
+            'post[title]' => $newBlogPostTitle,
+        ]);
+        $client->submit($form);
+
+        $this->assertSame(Response::HTTP_FOUND, $client->getResponse()->getStatusCode());
+
+        /** @var Post $post */
+        $post = $client->getContainer()->get('doctrine')->getRepository(Post::class)->find(1);
+        $this->assertSame($newBlogPostTitle, $post->getTitle());
+    }
+
 }
