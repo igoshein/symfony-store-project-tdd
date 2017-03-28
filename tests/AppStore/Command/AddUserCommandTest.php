@@ -78,4 +78,22 @@ class AddUserCommandTest extends KernelTestCase
         yield [true];
     }
 
+    /**
+     * This helper method checks that the user was correctly created and saved
+     * in the database.
+     */
+    public function assertUserCreated($isAdmin)
+    {
+        $container = self::$kernel->getContainer();
+
+        /** @var User $user */
+        $user = $container->get('doctrine')->getRepository(User::class)->findOneByEmail($this->userData['email']);
+        $this->assertNotNull($user);
+
+        $this->assertSame($this->userData['full-name'], $user->getFullName());
+        $this->assertSame($this->userData['username'], $user->getUsername());
+        $this->assertTrue($container->get('security.password_encoder')->isPasswordValid($user, $this->userData['password']));
+        $this->assertSame($isAdmin ? ['ROLE_ADMIN'] : ['ROLE_USER'], $user->getRoles());
+    }
+
 }
