@@ -117,4 +117,19 @@ class TagArrayToStringTransformerTest extends \PHPUnit\Framework\TestCase
         return new TagArrayToStringTransformer($entityManager);
     }
 
+    /**
+     * This helper method creates a Tag instance for the given tag name.
+     *
+     * @param string $name
+     *
+     * @return Tag
+     */
+    public function createTag($name)
+    {
+        $tag = new Tag();
+        $tag->setName($name);
+
+        return $tag;
+    }
+
 }
