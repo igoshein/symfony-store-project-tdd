@@ -74,4 +74,19 @@ class TagArrayToStringTransformerTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($persistedTags[1], $tags[1]);
     }
 
+    /**
+     * Ensures that the transformation from Tag instances to a simple string
+     * works as expected.
+     */
+    public function testTransform()
+    {
+        $persistedTags = [
+            $this->createTag('Hello'),
+            $this->createTag('World'),
+        ];
+        $transformed = $this->getMockedTransformer()->transform($persistedTags);
+
+        $this->assertSame('Hello,World', $transformed);
+    }
+
 }
