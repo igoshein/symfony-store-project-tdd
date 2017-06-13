@@ -29,4 +29,15 @@ class SluggerTest extends \PHPUnit_Framework_TestCase
         yield ['lorem العَرَبِيَّة‎‎ ipsum', 'lorem-العَرَبِيَّة‎‎-ipsum'];
     }
 
+    /**
+     * @dataProvider getSlugs
+     */
+    public function testSlugify($string, $slug)
+    {
+        $slugger = new Slugger();
+        $result = $slugger->slugify($string);
+
+        $this->assertSame($slug, $result);
+    }
+
 }
