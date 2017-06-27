@@ -26,4 +26,16 @@ class TagArrayToStringTransformerTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('Hello', $tags[0]->getName());
     }
 
+    /**
+     * Ensures that empty tags and errors in the number of commas are
+     * dealt correctly.
+     */
+    public function testCreateTheRightAmountOfTagsWithTooManyCommas()
+    {
+        $transformer = $this->getMockedTransformer();
+
+        $this->assertCount(3, $transformer->reverseTransform('Hello, Demo,, How'));
+        $this->assertCount(3, $transformer->reverseTransform('Hello, Demo, How,'));
+    }
+
 }
