@@ -100,4 +100,15 @@ class BlogControllerTest extends WebTestCase
         $this->assertSame($postContent, $post->getContent());
     }
 
+    public function testAdminShowPost()
+    {
+        $client = static::createClient([], [
+            'PHP_AUTH_USER' => 'jane_admin',
+            'PHP_AUTH_PW' => 'kitten',
+        ]);
+        $client->request('GET', '/en/admin/post/1');
+
+        $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+    }
+
 }
